@@ -89,11 +89,11 @@ public abstract class BaseTest {
         String dateName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
         TakesScreenshot ts = (TakesScreenshot) driver;
         File source = ts.getScreenshotAs(OutputType.FILE);
-        String destination =  System.getProperty("user.dir") + "/test-output/" + screenshotName + dateName
-                + ".png";
+        String filename = screenshotName + dateName + ".png";
+        String destination =  System.getProperty("user.dir") + "/test-output/" + filename;
         File finalDestination = new File(destination);
         FileUtils.copyFile(source, finalDestination);
-        return destination;
+        return filename;
     }
 
 }
