@@ -58,6 +58,12 @@ public class HomePage {
     @FindBy(xpath = "(//ul[contains(@class,'submenu-container')])[2]/li/a")
     protected List<WebElement> typesOfDresses;
 
+    @FindBy(xpath = "//div[@class='ac_results']//li[1]")
+    protected WebElement dropdownFirstItem;
+
+
+
+
     //user actions with assertions and validations
     public void clickSingInLink(){
         assertTrue(signInLink.isDisplayed(), "Sign in link was not displayed");
@@ -163,6 +169,12 @@ public class HomePage {
 
         }
 
+
+    }
+    public void searchProduct(Map<String,String> data) throws InterruptedException {
+        searchInputBox.sendKeys(data.get("productName"));
+        wait.until(ExpectedConditions.visibilityOf(dropdownFirstItem));
+        dropdownFirstItem.click();
     }
 }
 
