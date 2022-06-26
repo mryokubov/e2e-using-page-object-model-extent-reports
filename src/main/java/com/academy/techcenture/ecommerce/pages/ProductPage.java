@@ -1,9 +1,11 @@
 package com.academy.techcenture.ecommerce.pages;
 
 import com.academy.techcenture.ecommerce.utils.CommonUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
 import java.util.List;
@@ -130,7 +132,7 @@ public class ProductPage extends HomePage {
     @FindBy(id = "group_1")
     private WebElement sizeOptions;
 
-    @FindBy(id = "color_to_pick_list")
+    @FindBy(xpath = "//ul[@id='color_to_pick_list']/li/a")
     private List<WebElement> colors;
 
     @FindBy(xpath = "//button[@name='Submit']")
@@ -178,6 +180,11 @@ public class ProductPage extends HomePage {
     private String[] socialNetworksLinksExpected = {"tweet",
             "share", "google+", "pinterest"};
 
+    @FindBy(xpath = "//h2[contains(.,'Product successfully')]")
+    private WebElement productFoundMessage;
+
+    @FindBy(xpath = "//span[@class='ajax_block_cart_total']")
+    private WebElement totalPrice;
 
     public void verifyingTheProductPage(Map<String, String> data) {
         assertTrue(breadcrumb.isDisplayed(), "Bread crumb is not displayed");
@@ -190,6 +197,8 @@ public class ProductPage extends HomePage {
             assertEquals(socialNetworksLinks.get(i).getText().toLowerCase().trim(), socialNetworksLinksExpected[i],
                     "Network Link did not match " + socialNetworksLinksExpected[i]);
         }
+        verifyingReviewPopUp(data);
+        verifyFriendMessage(data);
         assertEquals(priceAfterDiscount.getText().trim().replace("$", ""), data.get("Price After Discount"), "Price after discount isn't correct");
         assertEquals(priceBeforeDiscount.getText().trim().replace("$", ""), data.get("Price Before Discount"), "Price before discount isn't correct");
         assertEquals(reductionPrecent.getText().trim().replace("-", ""), data.get("Discount"), "Discount isn't correct");
@@ -197,7 +206,10 @@ public class ProductPage extends HomePage {
         assertTrue(plusBtn.isEnabled(), "Minus btn is not enabled");
         assertTrue(quantityInput.isEnabled(), "Quantity Input is not enabled");
 //        if(quantityInput.getText().trim().equals(1)){
-        plusBtn.click();
+        for (int i = 1; i <= Integer.parseInt(data.get("Quantity")); i++) {
+            plusBtn.click();
+        }
+
 //        }
 //        else if (!quantityInput.getText().trim().equals(2)) {
 //            int quantity = Integer.parseInt(quantityInput.getText().trim());
@@ -207,6 +219,16 @@ public class ProductPage extends HomePage {
         //   }
         assertTrue(sizeOptions.isEnabled(), "Size field is not enabled");
         assertEquals(colors.size(), data.get("Available Color"), "The number of colors does not match");
+     //   for (int i = 0; i < colors.size(); i++) {
+    //        if (colors.get(i).getAttribute("name").equals(data.get("PickColor"))){
+        //colors.get(i).click();
+    //       }
+     //   }
+        //pick color based on excel column
+        driver.findElement(By.xpath("//ul[@id='color_to_pick_list']/li/a[@name='"+data.get("PickColor")+"']")).click();
+
+        new Select(sizeOptions).selectByVisibleText(data.get("Size"));
+
         assertTrue(wishListBtn.isEnabled(), "Wish button isn't enabled");
         assertTrue(paymentLogos.isDisplayed(), "Payment logos isn't displayed");
         assertTrue(dataSheetHeader.isDisplayed(), "Data Sheet Header isn't displayed");
@@ -216,10 +238,26 @@ public class ProductPage extends HomePage {
         assertEquals(moreInfoText.getText().trim(), data.get("Info Text"), "Info text isn't correct");
         assertEquals(reviews.getText().trim(), "Reviews", "Review header isn't correct");
         assertEquals(reviewsText.isDisplayed(), "Review text isn't displayed");
-        verifyFriendMessage(data);
-        verifyingReviewPopUp(data);
         assertTrue(addToCartBtn.isEnabled(), "The add button isn't enabled");
+
+
         addToCartBtn.click();
+    }
+    public void verifyAddToCardPopUp(Map<String, String> data){
+        assertEquals(addToCartLayersProductInfo.get(0).getText(), data.get("Name"), "The header for the dress does not match");
+        String[] colorAndSize = addToCartLayersProductInfo.get(1).getText().split(","); //Black, M
+
+        String uiColor = colorAndSize[0].trim();
+        String uiSize = colorAndSize[1].trim();
+        assertEquals(uiColor, data.get("PickColor"));
+        assertEquals(uiSize, data.get("Size"));
+
+       assertEquals( addToCartLayersProductInfo.get(2), data.get("Quantity"));
+        String totalPriceStr = totalPrice.getText().replace("$", "");
+        assertEquals(totalPriceStr, data.get("TotalCost"), "Total cost does not match with Excel expected data");
+        proceedCheckOutBtn.click();
+
+
     }
 
     public void verifyingReviewPopUp(Map<String, String> data) {

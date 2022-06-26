@@ -11,7 +11,7 @@ import java.util.Map;
 public class PlaceOrderTest extends BaseTest {
 
 
-    @Test(priority = 0,  dataProvider = "contactUs")
+    @Test(priority = 0,  dataProvider = "placeOrder")
     public void placeOrderRegisteredUserTest( Map<String,String> data ) throws IOException {
 
         extentTest = extentReports.startTest("place order positive test");
@@ -20,10 +20,10 @@ public class PlaceOrderTest extends BaseTest {
     }
 
 
-    @DataProvider(name = "")
+    @DataProvider(name = "placeOrder")
     public Object[][] getNewUsersData(){
         //todo use the proper sheetname
-        ExcelReader excelReader = new ExcelReader("src/main/resources/testData/ecommerce.xlsx", "");
+        ExcelReader excelReader = new ExcelReader("src/main/resources/testData/ecommerce.xlsx", "ProductPage");
         return excelReader.getData();
     }
 }
