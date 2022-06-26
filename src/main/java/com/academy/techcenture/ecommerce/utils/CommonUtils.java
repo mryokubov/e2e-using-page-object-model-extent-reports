@@ -97,6 +97,10 @@ public class CommonUtils {
 
 
     }
+    public static int randomStar(){
+        return (int)(Math.random() * (5 - 1  + 1 ) + 1);
+    }
+
 
 
 }
