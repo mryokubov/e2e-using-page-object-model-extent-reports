@@ -172,7 +172,7 @@ public class HomePage {
 
     }
     public void searchProduct(Map<String,String> data) throws InterruptedException {
-        searchInputBox.sendKeys(data.get("productName"));
+        searchInputBox.sendKeys(data.get("Name"));
         wait.until(ExpectedConditions.visibilityOf(dropdownFirstItem));
         dropdownFirstItem.click();
     }
