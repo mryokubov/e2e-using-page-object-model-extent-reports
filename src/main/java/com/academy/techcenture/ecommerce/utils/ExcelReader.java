@@ -33,7 +33,7 @@ public class ExcelReader {
     public Object[][] getData(){
         FormulaEvaluator evaluator = workBook.getCreationHelper().createFormulaEvaluator();
 
-        int rows = workSheet.getLastRowNum(); // returns number of rows
+         int rows = workSheet.getLastRowNum(); // returns number of rows
         int cols = workSheet.getRow(0).getLastCellNum(); //returns number of cols
 
         Object[][] data = new Object[rows][1];
