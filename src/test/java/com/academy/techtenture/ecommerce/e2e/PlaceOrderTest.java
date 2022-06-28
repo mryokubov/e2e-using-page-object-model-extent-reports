@@ -1,9 +1,6 @@
 package com.academy.techtenture.ecommerce.e2e;
+import com.academy.techcenture.ecommerce.pages.*;
 
-import com.academy.techcenture.ecommerce.pages.HomePage;
-import com.academy.techcenture.ecommerce.pages.LoginPage;
-import com.academy.techcenture.ecommerce.pages.ProductPage;
-import com.academy.techcenture.ecommerce.pages.SummaryTabPage;
 import com.academy.techcenture.ecommerce.utils.ExcelReader;
 import com.academy.techtenture.ecommerce.base.BaseTest;
 import com.relevantcodes.extentreports.LogStatus;
@@ -12,23 +9,19 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.Map;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
-
 public class PlaceOrderTest extends BaseTest {
 
 
     @Test(priority = 0,  dataProvider = "ProductPage")
-    public void placeOrderRegisteredUserTest( Map<String,String> data ) throws IOException, InterruptedException {
+    public void placeOrderRegisteredUserTest( Map<String,String> data ) throws IOException {
 
         extentTest = extentReports.startTest("place order positive test");
         HomePage homePage = new HomePage(driver);
         LoginPage loginPage = new LoginPage(driver);
-        ProductPage productPage  = new ProductPage(driver);
+        ProductPage productPage = new ProductPage(driver);
         SummaryTabPage summaryTabPage = new SummaryTabPage(driver);
-        extentTest.log(LogStatus.INFO, "Logged in as a valid customer");
         homePage.clickSingInLink();
-        extentTest.log(LogStatus.INFO, "Clicked on sign in link");
+        extentTest.log(LogStatus.INFO, "clicked on sign in link");
         loginPage.login();
         extentTest.log(LogStatus.INFO, "Logged in successfully");
         homePage.searchProduct(data);

@@ -203,8 +203,8 @@ public class ProductPage extends HomePage {
             assertEquals(socialNetworksLinks.get(i).getText().toLowerCase().trim(), socialNetworksLinksExpected[i],
                     "Network Link did not match " + socialNetworksLinksExpected[i]);
         }
-//        verifyingReviewPopUp(data);
-//        verifyFriendMessage(data);
+        verifyingReviewPopUp(data);
+        verifyFriendMessage(data);
         assertEquals(priceAfterDiscount.getText().trim().replace("$", ""), data.get("PriceAfterDiscount"), "Price after discount isn't correct");
         assertEquals(priceBeforeDiscount.getText().trim().replace("$", ""), data.get("PriceBeforeDiscount"), "Price before discount isn't correct");
         assertEquals(reductionPrecent.getText().trim().replaceAll("[-%]", ""), data.get("Discount"), "Discount isn't correct");
