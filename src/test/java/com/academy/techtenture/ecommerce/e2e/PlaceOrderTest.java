@@ -3,6 +3,7 @@ package com.academy.techtenture.ecommerce.e2e;
 import com.academy.techcenture.ecommerce.pages.HomePage;
 import com.academy.techcenture.ecommerce.pages.LoginPage;
 import com.academy.techcenture.ecommerce.pages.ProductPage;
+import com.academy.techcenture.ecommerce.pages.SummaryTabPage;
 import com.academy.techcenture.ecommerce.utils.ExcelReader;
 import com.academy.techtenture.ecommerce.base.BaseTest;
 import com.relevantcodes.extentreports.LogStatus;
@@ -22,6 +23,7 @@ public class PlaceOrderTest extends BaseTest {
         HomePage homePage = new HomePage(driver);
         LoginPage loginPage = new LoginPage(driver);
         ProductPage productPage  = new ProductPage(driver);
+        SummaryTabPage summaryTabPage = new SummaryTabPage(driver);
         extentTest.log(LogStatus.INFO, "Logged in as a valid customer");
         homePage.clickSingInLink();
         extentTest.log(LogStatus.INFO, "Clicked on sign in link");
@@ -30,6 +32,9 @@ public class PlaceOrderTest extends BaseTest {
         homePage.searchProduct(data);
         extentTest.log(LogStatus.INFO, "Search product successfully");
         productPage.verifyingTheProductPage(data);
+        extentTest.log(LogStatus.INFO, "Product was successfully added");
+        summaryTabPage.shoppingCartSummary(data);
+        //extentTest.log(LogStatus.INFO, "Product was successfully added");
 
 
  //       extentTest.log(LogStatus.INFO, "Place order finished successfully");
