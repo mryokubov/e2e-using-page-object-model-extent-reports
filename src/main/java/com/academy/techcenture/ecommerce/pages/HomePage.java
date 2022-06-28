@@ -24,7 +24,7 @@ public class HomePage {
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(50));
         PageFactory.initElements(driver, this);
     }
 
@@ -61,7 +61,6 @@ public class HomePage {
 
     @FindBy(xpath = "//div[@class='ac_results']//li[1]")
     protected WebElement dropdownFirstItem;
-
 
 
 
@@ -172,7 +171,7 @@ public class HomePage {
 
 
     }
-    public void searchProduct(Map<String,String> data) throws InterruptedException {
+    public void searchProduct(Map<String,String> data) {
         searchInputBox.sendKeys(data.get("Name"));
         wait.until(ExpectedConditions.visibilityOf(dropdownFirstItem));
         dropdownFirstItem.click();
