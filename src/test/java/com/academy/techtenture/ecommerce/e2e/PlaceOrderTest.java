@@ -13,6 +13,8 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.Map;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public class PlaceOrderTest extends BaseTest {
 
 
@@ -34,7 +36,7 @@ public class PlaceOrderTest extends BaseTest {
         productPage.verifyingTheProductPage(data);
         extentTest.log(LogStatus.INFO, "Product was successfully added");
         summaryTabPage.shoppingCartSummary(data);
-        //extentTest.log(LogStatus.INFO, "Product was successfully added");
+
 
 
  //       extentTest.log(LogStatus.INFO, "Place order finished successfully");

@@ -38,26 +38,44 @@ public class SummaryTabPage extends HomePage {
     @FindBy(xpath = "//table[@id='cart_summary']//tr//th")
     private List<WebElement> summaryOptions;
 
-    @FindBy(xpath = "(//a[contains(text(),'Printed Summer Dress')])[2]")
+    @FindBy(css = "td[class='cart_description'] p[class='product-name'] a")
     private WebElement descriptionProductName;
 
-    @FindBy(xpath = "td[class='cart_description'] small a")
+    @FindBy(css = "td[class='cart_description'] small a")
     private WebElement sizeColor;
 
     @FindBy(xpath = "//span[@class='label label-success']")
     private WebElement availableInStock;
 
-    @FindBy(xpath = "//td[@class='cart_unit']")
+    @FindBy(xpath = "//span[contains(@class,'price special-price')]")
     private WebElement unitPrice;
 
-    @FindBy(xpath = "//input[@name='quantity_5_26_0_691608']")
+    @FindBy(xpath = "//span[@class='price-percent-reduction small']")
+    private WebElement discount;
+
+    @FindBy(xpath = "//span[@class='old-price']")
+    private WebElement oldPrice;
+
+    @FindBy(xpath = "//td[@class='cart_quantity text-center']")
     private WebElement quantityInput;
 
-    @FindBy(xpath = "td[class='cart_total']")
+    @FindBy(xpath = "//td[@class='cart_total']")
     private WebElement totalInput;
 
-    @FindBy(xpath = "td[class='cart_delete text-center'] div")
+    @FindBy(xpath = "//i[@class='icon-trash']")
     private WebElement deleteIcon;
+
+    @FindBy (xpath = "//td[@id='total_product']")
+    protected WebElement totalProduct;
+
+    @FindBy (xpath = "//td[@id='total_shipping']")
+    protected WebElement totalShipping;
+
+    @FindBy (xpath = "//td[@id='total_price_without_tax']")
+    protected WebElement totalWithShipping;
+
+    @FindBy (xpath = "//span[@id='total_price']")
+    protected WebElement totalTotal;
 
 
         //summary, sigIn and address elements .
@@ -130,7 +148,7 @@ public class SummaryTabPage extends HomePage {
         protected WebElement totalProducts;
 
         @FindBy(xpath = "//td[text()='Total shipping']/following-sibling::td")
-        protected WebElement totalShipping;
+        protected WebElement totalofShipping;
 
         @FindBy(xpath = "//td[text()='Total shipping']/following-sibling::td")
         protected WebElement total;
@@ -225,6 +243,27 @@ public class SummaryTabPage extends HomePage {
         for (int i = 0; i < summaryOptions.size()-1; i++) {
             assertEquals(summaryOptions.get(i).getText().toLowerCase(),summaryOptionsExpected[i],summaryOptionsExpected[i]+"isnt match");
         }
+        assertEquals(descriptionProductName.getText().trim(), data.get("Name"),"Product name isn't correct");
+        String[] colorAndSize = sizeColor.getText().split(",");
+        String[] uiColor = colorAndSize[0].split(":");
+        String[] uiSize  = colorAndSize[1].split(":");
+        assertEquals(uiColor[1].trim(), data.get("PickColor"),"Color isn't correct");
+        assertEquals(uiSize[1].trim(), data.get("Size"),"Size isn't correct");
+        assertTrue( availableInStock.isDisplayed(),"In Stoke isn't displayed");
+        assertEquals(unitPrice.getText().replace("$",""),data.get("PriceAfterDiscount"), "Price isn't correct");
+        assertEquals(discount.getText().replaceAll("[-%]","").trim(),data.get("Discount"), "Discount isn't correct");
+        assertEquals(oldPrice.getText().replace("$",""),data.get("PriceBeforeDiscount"), "Price before discount isn't correct");
+        assertTrue(quantityInput.isDisplayed(), "Quantity isn't displayed");
+        double total = Double.parseDouble(data.get("Quantity"))*Double.parseDouble(data.get("PriceAfterDiscount"));
+        assertEquals(totalInput.getText().replace("$",""),Double.toString(total), "Total Input isn't correct");
+        assertTrue(deleteIcon.isEnabled(),"Delete Icon isn't enabled");
+        assertEquals(totalProduct.getText().replace("$",""),Double.toString(total), "Total Input isn't correct");
+        assertEquals(totalofShipping.getText().replace("$","").substring(0,3),data.get("ShippingCost"), "Shipping Cost isn't correct");
+        double totalPlusShipping = Double.parseDouble(data.get("ShippingCost"))+total;
+        assertEquals(totalWithShipping.getText().replace("$",""),Double.toString(totalPlusShipping), "Total plus Shipping isn't correct");
+        assertEquals(totalTotal.getText().replace("$",""),Double.toString(totalPlusShipping), "Finished Total isn't correct");
+
+
 
 
 
