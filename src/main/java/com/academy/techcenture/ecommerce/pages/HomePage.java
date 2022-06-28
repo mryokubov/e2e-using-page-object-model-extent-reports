@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -65,7 +66,7 @@ public class HomePage {
 
 
     //user actions with assertions and validations
-    public void clickSingInLink(){
+    public void clickSingInLink() {
         assertTrue(signInLink.isDisplayed(), "Sign in link was not displayed");
         signInLink.click();
         System.out.println("clicking sign in link");

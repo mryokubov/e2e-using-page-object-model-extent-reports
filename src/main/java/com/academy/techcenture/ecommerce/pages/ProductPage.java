@@ -240,7 +240,6 @@ public class ProductPage extends HomePage {
     public void verifyAddToCardPopUp(Map<String, String> data){
 //        assertEquals(addToCartNameProduct.getText(),data.get("Name"), "The header for the dress does not match");
 //        String[] colorAndSize = addToCartSizeColor.getText().split(","); //Black, M
-//        System.out.println(addToCartSizeColor.getAttribute("innerText")+"1");
 //        String uiColor = colorAndSize[0].trim();
 //        String uiSize = colorAndSize[1].trim();
 //        assertEquals(uiColor, data.get("PickColor"));
