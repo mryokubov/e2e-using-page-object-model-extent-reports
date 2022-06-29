@@ -13,7 +13,7 @@ public class PlaceOrderTest extends BaseTest {
 
 
     @Test(priority = 0,  dataProvider = "ProductPage")
-    public void placeOrderRegisteredUserTest( Map<String,String> data ) throws IOException {
+    public void placeOrderRegisteredUserTest( Map<String,String> data ) throws IOException, InterruptedException {
 
         extentTest = extentReports.startTest("place order positive test");
         HomePage homePage = new HomePage(driver);

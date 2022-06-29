@@ -2,8 +2,10 @@ package com.academy.techcenture.ecommerce.pages;
 
 import com.academy.techcenture.ecommerce.utils.CommonUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
@@ -27,6 +29,9 @@ public class SummaryTabPage extends HomePage {
 
     @FindBy(xpath = "//li[contains(@class,'first')]//span[1]")
     private WebElement summaryTab;
+
+    @FindBy(xpath = "//li[contains(@class,'four')]//span[1]")
+    private WebElement shippingTab;
 
     @FindBy(xpath = "//table[@id='cart_summary']//tr//th")
     private List<WebElement> summaryOptions;
@@ -89,11 +94,47 @@ public class SummaryTabPage extends HomePage {
     @FindBy(name ="message")
     protected WebElement commentBox;
 
-    public void shoppingCartSummary(Map<String, String> data) {
+    @FindBy(xpath = "//div[@class='delivery_option_price']")
+    private WebElement deliveryOptPrice;
+
+    @FindBy(xpath = "//td[@class='delivery_option_radio']//input")
+    private WebElement shippingRadioBtn;
+
+    @FindBy(xpath = "//div[@class='fancybox-outer']")
+    private WebElement warningTermsPopUp;
+
+    @FindBy(xpath ="//a[@title='Close']")
+    private WebElement warningTermsPopUpClose;
+
+    @FindBy(linkText = "(Read the Terms of Service)")
+    protected WebElement readTermLink;
+
+    @FindBy(xpath = "//div[contains(@class,'content_only')]/p")
+    protected List<WebElement> threeRules;
+
+    @FindBy(xpath = "//a[@title='Close']")
+    private WebElement closeMustAgreeBtns;
+
+    @FindBy(id = "cgv")
+    protected WebElement checkServiceBoxInput;
+
+    @FindBy(tagName = "iframe")
+    private  WebElement childFrame;
+
+    private void proceedToCheckOut(){
+
+        assertTrue(checkOutBtn.isEnabled(), "Checkout buttons is not Enabled!");
+        checkOutBtn.click();
+
+    }
+
+    public void shoppingCartSummary(Map<String, String> data) throws InterruptedException {
         verifyingProductSummaryTabs(data);
-        checkOutBtn.click();
+        proceedToCheckOut();
         verifyingAddressTab(data);
-        checkOutBtn.click();
+        proceedToCheckOut();
+        verifyShippingTab(data);
+        proceedToCheckOut();
     }
 
     public void verifyingProductSummaryTabs(Map<String, String> data) {
@@ -102,9 +143,10 @@ public class SummaryTabPage extends HomePage {
             assertEquals(shoppingToDo.get(i).getText().toLowerCase().substring(4), toDoOptions[i], toDoOptions[i] + "isnt match");
         }
 
-        String rgbFormat = summaryTab.getCssValue("color");
+        verifyActiveTab(summaryTab);
+        /*String rgbFormat = summaryTab.getCssValue("color");
         String hexcolor = Color.fromString(rgbFormat).asHex(); //converted Into HexFormat
-        assertEquals(hexcolor, "#ffffff", "Summary button is selected");
+        assertEquals(hexcolor, "#ffffff", "Summary button is selected");*/
         for (int i = 0; i < summaryOptions.size() - 1; i++) {
             assertEquals(summaryOptions.get(i).getText().toLowerCase(), summaryOptionsExpected[i], summaryOptionsExpected[i] + "isnt match");
         }
@@ -131,9 +173,9 @@ public class SummaryTabPage extends HomePage {
     }
 
    public  void verifyingAddressTab (Map<String, String> data){
-       String rgbFormat = addressTab.getCssValue("color");
-       String hexcolor = Color.fromString(rgbFormat).asHex(); //converted Into HexFormat
-       assertEquals(hexcolor, "#ffffff", "Address button is selected");
+
+       verifyActiveTab(addressTab);
+
        assertTrue(addressField.isEnabled(),"Address Field is enabled");
        if(!addressCheckBox.isSelected()){
            addressCheckBox.click();
@@ -141,6 +183,61 @@ public class SummaryTabPage extends HomePage {
        assertTrue(commentBox.isEnabled(),"Address Field is enabled");
        commentBox.sendKeys("There should be a random comment, but may be later");
     }
+
+    public void verifyShippingTab(Map<String , String> data) throws InterruptedException {
+
+        verifyActiveTab(shippingTab);
+
+        assertEquals(Double.parseDouble(deliveryOptPrice.getText().trim().replace("$","")), Double.parseDouble(data.get("ShippingCost")), "Shipping price doesn't match");
+        assertTrue(shippingRadioBtn.isSelected(), "Radio button is not selected!");
+        proceedToCheckOut();
+        assertTrue(warningTermsPopUp.isDisplayed(),"Warning for terms is not Displayed!");
+        warningTermsPopUpClose.click();
+
+        assertTrue(readTermLink.isDisplayed(), "read term link is not displayed");
+        readTermLink.click();
+        Thread.sleep(2000);
+
+        //Switching to child html (iFrame)
+        switchToFrame(childFrame);
+
+        assertEquals(threeRules.get(0).getText().trim(), data.get("Rule1").trim(), "Rule 1 doesnt match with data we have");
+        assertEquals(threeRules.get(1).getText().trim(), data.get("Rule2").trim(), "Rule 2 doesnt match with data we have");
+        assertEquals(threeRules.get(2).getText().trim(), data.get("Rule3").trim(), "Rule 3 doesnt match with data we have");
+
+        //Switching back to main html
+        switchToFrame(0);
+
+        assertTrue(closeMustAgreeBtns.isDisplayed(), "Close button for tearms is not displayed");
+        closeMustAgreeBtns.click();
+
+        if (!checkServiceBoxInput.isSelected()) {
+            checkServiceBoxInput.click();
+        }
+
+    }
+
+
+    private void switchToFrame(WebElement frame){
+        driver.switchTo().frame(frame);
+    }
+    private void switchToFrame(int index){
+        if (index == 0){
+            driver.switchTo().defaultContent(); //switiching to parent window
+        }
+        else{
+            driver.switchTo().frame(index);
+        }
+
+    }
+
+    private void verifyActiveTab(WebElement tab){
+        String rgbFormat = tab.getCssValue("color");
+        String hexcolor = Color.fromString(rgbFormat).asHex(); //converted Into HexFormat
+        assertEquals(hexcolor, "#ffffff", "Tab button is selected");
+    }
+
+
 }
 
 

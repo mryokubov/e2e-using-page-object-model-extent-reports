@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
@@ -165,7 +166,7 @@ public class ProductPage extends HomePage {
     @FindBy(xpath = "//div[@class='layer_cart_product_info']//span")
     private List<WebElement> addToCartLayersProductInfo;
 
-    @FindBy(xpath = "//span[@id='layer_cart_product_title'])[1]")
+    @FindBy(xpath = "(//span[@id='layer_cart_product_title'])[1]")
     private WebElement addToCartNameProduct;
 
     @FindBy(id="layer_cart_product_attributes")
@@ -189,7 +190,7 @@ public class ProductPage extends HomePage {
     @FindBy(xpath = "//h2[contains(.,'Product successfully')]")
     private WebElement productFoundMessage;
 
-    @FindBy(css = "//div[@class='layer_cart_cart col-xs-12 col-md-6']//div[3]/span")
+    @FindBy(xpath = "//div[@class='layer_cart_cart col-xs-12 col-md-6']//div[3]/span")
     private WebElement totalPrice;
 
     public void verifyingTheProductPage(Map<String, String> data) {
@@ -237,21 +238,24 @@ public class ProductPage extends HomePage {
         verifyAddToCardPopUp(data);
 
     }
-    public void verifyAddToCardPopUp(Map<String, String> data){
-//        assertEquals(addToCartNameProduct.getText(),data.get("Name"), "The header for the dress does not match");
-//        String[] colorAndSize = addToCartSizeColor.getText().split(","); //Black, M
-//        String uiColor = colorAndSize[0].trim();
-//        String uiSize = colorAndSize[1].trim();
-//        assertEquals(uiColor, data.get("PickColor"));
-//        assertEquals(uiSize, data.get("Size"));
-//
-//       //assertEquals(addToCartQuantityProduct.getText(), data.get("Quantity"));
-//        String totalPriceStr = totalPrice.getAttribute("span").replace("$", "");
-//        System.out.println(totalPriceStr);
-//        assertEquals(totalPriceStr, data.get("TotalCost"), "Total cost does not match with Excel expected data");
+    public void verifyAddToCardPopUp(Map<String, String> data) {
+
+
+        //wait for that pop up to appear
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[contains(@class,'layer_cart_product')]"))));
+
+        assertEquals(addToCartNameProduct.getText(), data.get("Name"), "The header for the dress does not match");
+        String[] colorAndSize = addToCartSizeColor.getText().split(","); //Black, M
+        String uiColor = colorAndSize[0].trim();
+        String uiSize = colorAndSize[1].trim();
+        assertEquals(uiColor, data.get("PickColor"));
+        assertEquals(uiSize, data.get("Size"));
+
+        assertEquals(addToCartQuantityProduct.getText(), data.get("Quantity"));
+        String totalPriceStr = totalPrice.getText().replace("$", "");
+        System.out.println(totalPriceStr);
+        assertEquals(totalPriceStr, data.get("TotalCost"), "Total cost does not match with Excel expected data");
         proceedCheckOutBtn.click();
-
-
     }
 
     public void verifyingReviewPopUp(Map<String, String> data) {
