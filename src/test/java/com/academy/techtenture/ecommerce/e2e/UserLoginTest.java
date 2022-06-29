@@ -14,7 +14,7 @@ public class UserLoginTest extends BaseTest {
 
 
     @Test(priority = 0, dataProvider = "userLoginData")
-    public void userLoginPositive(Map<String,String> users) {
+    public void userLoginPositive(Map<String,String> users) throws InterruptedException {
         extentTest = extentReports.startTest("user login positive test");
         HomePage homePage = new HomePage(driver);
         LoginPage loginPage = new LoginPage(driver);

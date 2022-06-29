@@ -24,7 +24,7 @@ public class HomePage {
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         PageFactory.initElements(driver, this);
     }
 
@@ -65,9 +65,11 @@ public class HomePage {
 
 
     //user actions with assertions and validations
-    public void clickSingInLink() {
-        assertTrue(signInLink.isDisplayed(), "Sign in link was not displayed");
+    public void clickSingInLink() throws InterruptedException {
+        assertTrue(signInLink.isEnabled(), "Sign in link was not displayed");
+        Thread.sleep(2000);
         signInLink.click();
+
         System.out.println("clicking sign in link");
     }
 

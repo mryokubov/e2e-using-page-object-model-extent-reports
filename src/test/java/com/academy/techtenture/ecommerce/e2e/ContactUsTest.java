@@ -15,7 +15,7 @@ public class ContactUsTest extends BaseTest {
 
 
     @Test(priority = 0,  dataProvider = "contactUs")
-    public void contactUsPositiveTest( Map<String,String> data ) throws IOException {
+    public void contactUsPositiveTest( Map<String,String> data ) throws InterruptedException {
 
         extentTest = extentReports.startTest("contact us functionality positive test");
         HomePage homePage = new HomePage(driver);
