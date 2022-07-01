@@ -86,12 +86,12 @@ public class SummaryTabPage extends HomePage {
     @FindBy(xpath = "//li[@class='step_current third']//span[1]")
     protected WebElement addressTab;
 
-    @FindBy(id="id_address_delivery")
+    @FindBy(id = "id_address_delivery")
     protected WebElement addressField;
     @FindBy(id = "addressesAreEquals")
     protected WebElement addressCheckBox;
 
-    @FindBy(name ="message")
+    @FindBy(name = "message")
     protected WebElement commentBox;
 
     @FindBy(xpath = "//div[@class='delivery_option_price']")
@@ -103,7 +103,7 @@ public class SummaryTabPage extends HomePage {
     @FindBy(xpath = "//div[@class='fancybox-outer']")
     private WebElement warningTermsPopUp;
 
-    @FindBy(xpath ="//a[@title='Close']")
+    @FindBy(xpath = "//a[@title='Close']")
     private WebElement warningTermsPopUpClose;
 
     @FindBy(linkText = "(Read the Terms of Service)")
@@ -119,9 +119,15 @@ public class SummaryTabPage extends HomePage {
     protected WebElement checkServiceBoxInput;
 
     @FindBy(tagName = "iframe")
-    private  WebElement childFrame;
+    private WebElement childFrame;
 
-    private void proceedToCheckOut(){
+    @FindBy(xpath = "//li[@id='step_end']/span")
+    private WebElement paymentTab;
+
+    @FindBy(xpath = "(//td)//img")
+    private WebElement dressPaymentPic;
+
+    private void proceedToCheckOut() {
 
         assertTrue(checkOutBtn.isEnabled(), "Checkout buttons is not Enabled!");
         checkOutBtn.click();
@@ -135,6 +141,7 @@ public class SummaryTabPage extends HomePage {
         proceedToCheckOut();
         verifyShippingTab(data);
         proceedToCheckOut();
+        verifyPaymentTab(data);
     }
 
     public void verifyingProductSummaryTabs(Map<String, String> data) {
@@ -172,26 +179,26 @@ public class SummaryTabPage extends HomePage {
         assertTrue(checkOutBtn.isEnabled(), "Check Out Button isn't enabled");
     }
 
-   public  void verifyingAddressTab (Map<String, String> data){
+    public void verifyingAddressTab(Map<String, String> data) {
 
-       verifyActiveTab(addressTab);
+        verifyActiveTab(addressTab);
 
-       assertTrue(addressField.isEnabled(),"Address Field is enabled");
-       if(!addressCheckBox.isSelected()){
-           addressCheckBox.click();
-       }
-       assertTrue(commentBox.isEnabled(),"Address Field is enabled");
-       commentBox.sendKeys("There should be a random comment, but may be later");
+        assertTrue(addressField.isEnabled(), "Address Field is enabled");
+        if (!addressCheckBox.isSelected()) {
+            addressCheckBox.click();
+        }
+        assertTrue(commentBox.isEnabled(), "Address Field is enabled");
+        commentBox.sendKeys("There should be a random comment, but may be later");
     }
 
-    public void verifyShippingTab(Map<String , String> data) throws InterruptedException {
+    public void verifyShippingTab(Map<String, String> data) throws InterruptedException {
 
         verifyActiveTab(shippingTab);
 
-        assertEquals(Double.parseDouble(deliveryOptPrice.getText().trim().replace("$","")), Double.parseDouble(data.get("ShippingCost")), "Shipping price doesn't match");
+        assertEquals(Double.parseDouble(deliveryOptPrice.getText().trim().replace("$", "")), Double.parseDouble(data.get("ShippingCost")), "Shipping price doesn't match");
         assertTrue(shippingRadioBtn.isSelected(), "Radio button is not selected!");
         proceedToCheckOut();
-        assertTrue(warningTermsPopUp.isDisplayed(),"Warning for terms is not Displayed!");
+        assertTrue(warningTermsPopUp.isDisplayed(), "Warning for terms is not Displayed!");
         warningTermsPopUpClose.click();
 
         assertTrue(readTermLink.isDisplayed(), "read term link is not displayed");
@@ -218,23 +225,39 @@ public class SummaryTabPage extends HomePage {
     }
 
 
-    private void switchToFrame(WebElement frame){
+    private void switchToFrame(WebElement frame) {
         driver.switchTo().frame(frame);
     }
-    private void switchToFrame(int index){
-        if (index == 0){
+
+    private void switchToFrame(int index) {
+        if (index == 0) {
             driver.switchTo().defaultContent(); //switiching to parent window
-        }
-        else{
+        } else {
             driver.switchTo().frame(index);
         }
 
     }
 
-    private void verifyActiveTab(WebElement tab){
-        String rgbFormat = tab.getCssValue("color");
-        String hexcolor = Color.fromString(rgbFormat).asHex(); //converted Into HexFormat
+    private void verifyActiveTab(WebElement tab) {
+
+        String rgbFormat = tab.getCssValue("color"); // rgb(255,255,255)
+        String hexcolor = Color.fromString(rgbFormat).asHex(); //converted Into HexFormat #fffff
         assertEquals(hexcolor, "#ffffff", "Tab button is selected");
+    }
+
+    public void verifyPaymentTab(Map<String, String> data) {
+        verifyActiveTab(paymentTab);
+        assertTrue(dressPaymentPic.isDisplayed(), "Dress pic is NOT displayed");
+        assertEquals(descriptionProductName.getText().trim(),data.get("Name").trim() , "Name of the product is NOT displayed");
+        String[] colorAndSize = sizeColor.getText().split(",");
+        String[] uiColor = colorAndSize[0].split(":");
+        String[] uiSize = colorAndSize[1].split(":");
+        assertEquals(uiColor[1].trim(), data.get("PickColor"), "Color isn't correct");
+        assertEquals(uiSize[1].trim(), data.get("Size"), "Size isn't correct");
+        assertTrue(availableInStock.isDisplayed(), "In Stoke isn't displayed");
+        assertEquals(unitPrice.getText().replace("$", ""), data.get("PriceAfterDiscount"), "Price isn't correct");
+        assertEquals(discount.getText().replaceAll("[-%]", "").trim(), data.get("Discount"), "Discount isn't correct");
+        assertEquals(oldPrice.getText().replace("$", ""), data.get("PriceBeforeDiscount"), "Price before discount isn't correct");
     }
 
 
