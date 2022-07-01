@@ -1,15 +1,9 @@
 package com.academy.techcenture.ecommerce.pages;
 
-import com.academy.techcenture.ecommerce.utils.CommonUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.Select;
-import org.testng.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -64,16 +58,16 @@ public class SummaryTabPage extends HomePage {
     private WebElement deleteIcon;
 
     @FindBy(xpath = "//td[@id='total_product']")
-    protected WebElement totalProduct;
+    protected WebElement totalProductPriceBeforeShipping;
 
     @FindBy(xpath = "//td[@id='total_shipping']")
-    protected WebElement totalShipping;
+    protected WebElement totalShippingPrice;
 
     @FindBy(xpath = "//td[@id='total_price_without_tax']")
     protected WebElement totalWithShipping;
 
     @FindBy(xpath = "//span[@id='total_price']")
-    protected WebElement totalTotal;
+    protected WebElement totalProductPriceAfterShipping;
 
     @FindBy(xpath = "(//span[contains(text(),'Proceed to checkout')])[2]")
     protected WebElement checkOutBtn;
@@ -127,6 +121,19 @@ public class SummaryTabPage extends HomePage {
     @FindBy(xpath = "(//td)//img")
     private WebElement dressPaymentPic;
 
+    @FindBy(xpath = "//td[contains(@class,'cart_quantity')]/span")
+    private WebElement quantityPaymentTab;
+
+    @FindBy(xpath = "//td[@class='cart_total']/span")
+    private WebElement total;
+
+    @FindBy(xpath = "//a[@class='bankwire']")
+    private WebElement payByBankWire;
+
+    @FindBy(xpath = "//a[@class='cheque']")
+    private WebElement payByCheck;
+
+
     private void proceedToCheckOut() {
 
         assertTrue(checkOutBtn.isEnabled(), "Checkout buttons is not Enabled!");
@@ -142,6 +149,7 @@ public class SummaryTabPage extends HomePage {
         verifyShippingTab(data);
         proceedToCheckOut();
         verifyPaymentTab(data);
+
     }
 
     public void verifyingProductSummaryTabs(Map<String, String> data) {
@@ -171,11 +179,11 @@ public class SummaryTabPage extends HomePage {
         double total = Double.parseDouble(data.get("Quantity")) * Double.parseDouble(data.get("PriceAfterDiscount"));
         assertEquals(totalInput.getText().replace("$", ""), Double.toString(total), "Total Input isn't correct");
         assertTrue(deleteIcon.isEnabled(), "Delete Icon isn't enabled");
-        assertEquals(totalProduct.getText().replace("$", ""), Double.toString(total), "Total Input isn't correct");
-        assertEquals(totalShipping.getText().replace("$", "").substring(0, 3), data.get("ShippingCost"), "Shipping Cost isn't correct");
+        assertEquals(totalProductPriceBeforeShipping.getText().replace("$", ""), Double.toString(total), "Total Input isn't correct");
+        assertEquals(totalShippingPrice.getText().replace("$", "").substring(0, 3), data.get("ShippingCost"), "Shipping Cost isn't correct");
         double totalPlusShipping = Double.parseDouble(data.get("ShippingCost")) + total;
         assertEquals(totalWithShipping.getText().replace("$", ""), Double.toString(totalPlusShipping), "Total plus Shipping isn't correct");
-        assertEquals(totalTotal.getText().replace("$", ""), Double.toString(totalPlusShipping), "Finished Total isn't correct");
+        assertEquals(totalProductPriceAfterShipping.getText().replace("$", ""), Double.toString(totalPlusShipping), "Finished Total isn't correct");
         assertTrue(checkOutBtn.isEnabled(), "Check Out Button isn't enabled");
     }
 
@@ -258,9 +266,28 @@ public class SummaryTabPage extends HomePage {
         assertEquals(unitPrice.getText().replace("$", ""), data.get("PriceAfterDiscount"), "Price isn't correct");
         assertEquals(discount.getText().replaceAll("[-%]", "").trim(), data.get("Discount"), "Discount isn't correct");
         assertEquals(oldPrice.getText().replace("$", ""), data.get("PriceBeforeDiscount"), "Price before discount isn't correct");
+        assertEquals(quantityPaymentTab.getText().trim(), data.get("Quantity").trim(), "Quantity on payment tab is not matching");
+        assertEquals(total.getText().trim().replace("$", ""), data.get("TotalCostBeforeShip"), "Total cost before ship is not macthing" );
+        assertEquals(totalProductPriceBeforeShipping.getText().trim().replace("$", ""), data.get("TotalCostBeforeShip"), "Total products cost before ship is not macthing" );
+        assertEquals(totalShippingPrice.getText().trim().replace("$", ""), data.get("ShippingCost"), "Total shipping cost is not matching");
+        assertEquals(totalProductPriceAfterShipping.getText().trim().replace("$", ""), data.get("TotalCost"),"Total product price after shipping  is not matching");
+        assertTrue(payByBankWire.isEnabled(), "Pay by bank wire is not enabled");
+        assertTrue(payByCheck.isEnabled(), "Pay by check is not enabled");
+        payForProduct(data);
     }
 
+    public void payForProduct(Map<String,String>data) {
+        if (data.get("PaymentMethod").equals("Wire")) {
+            payByBankWire.click();
 
+            ////div[contains(@class,'cheque-box')]/p[not(self::p/span)]
+
+
+        }else if(data.get("PaymentMethod").equals("Check")){
+            payByCheck.click();
+        }
+
+    }
 }
 
 
