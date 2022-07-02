@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 import java.util.Map;
@@ -364,10 +365,17 @@ public class SummaryTabPage extends HomePage {
         orderInfoTextUi = orderInfoTextUi.replace(" " + orderReference, "");
         assertEquals(orderInfoTextUi, data.get("OrderCompleteInfo"));
 
+        //goes back to orders page
+        goBackToOrders();
     }
 
+    @FindBy(linkText = "Back to orders")
+    private WebElement backToOrdersLnk;
+
     private void goBackToOrders(){
-        //todo I must complete this
+        wait.until(ExpectedConditions.elementToBeClickable(backToOrdersLnk));
+        assertEquals(backToOrdersLnk.getText().trim(),"Back to orders", "back to orders is not correct");
+        backToOrdersLnk.click();
     }
 
 }

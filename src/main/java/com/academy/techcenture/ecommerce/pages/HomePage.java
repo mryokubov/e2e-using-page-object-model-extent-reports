@@ -67,7 +67,7 @@ public class HomePage {
     //user actions with assertions and validations
     public void clickSingInLink() throws InterruptedException {
         assertTrue(signInLink.isEnabled(), "Sign in link was not displayed");
-        //Thread.sleep(2000);
+        Thread.sleep(3000);
         wait.until(ExpectedConditions.elementToBeClickable(signInLink));
         signInLink.click();
 

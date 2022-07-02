@@ -20,6 +20,7 @@ public class PlaceOrderTest extends BaseTest {
         LoginPage loginPage = new LoginPage(driver);
         ProductPage productPage = new ProductPage(driver);
         SummaryTabPage summaryTabPage = new SummaryTabPage(driver);
+        OrderHistoryPage orderHistoryPage = new OrderHistoryPage(driver);
         homePage.clickSingInLink();
         extentTest.log(LogStatus.INFO, "clicked on sign in link");
         loginPage.login();
@@ -29,7 +30,8 @@ public class PlaceOrderTest extends BaseTest {
         productPage.verifyingTheProductPage(data);
         extentTest.log(LogStatus.INFO, "Product was successfully added");
         summaryTabPage.shoppingCartSummary(data);
-
+        extentTest.log(LogStatus.INFO, "Navigated to order history page");
+        orderHistoryPage.verifyOrderHistory(data);
 
 
  //       extentTest.log(LogStatus.INFO, "Place order finished successfully");
