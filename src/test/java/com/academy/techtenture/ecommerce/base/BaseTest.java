@@ -80,7 +80,7 @@ public abstract class BaseTest {
         extentReports.endTest(extentTest);
 
         if (driver != null){
-            driver.quit();
+            //driver.quit();
         }
     }
 

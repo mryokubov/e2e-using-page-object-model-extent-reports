@@ -1,5 +1,7 @@
 package com.academy.techcenture.ecommerce.pages;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -7,6 +9,9 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Spliterator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.testng.Assert.*;
 
@@ -133,6 +138,24 @@ public class SummaryTabPage extends HomePage {
     @FindBy(xpath = "//a[@class='cheque']")
     private WebElement payByCheck;
 
+    @FindBy(xpath = "//h3[@class='page-subheading']")
+    private WebElement paymentOptionsHeader;
+
+    @FindBy(xpath = "//div[contains(@class,'cheque-box')]/p[not(self::p/span)]")
+    private List<WebElement> instructionCheckSteps;
+
+    @FindBy(xpath = "//div[contains(@class,'cheque-box')]/p[not(self::p/span)]")
+    private List<WebElement> instructionBankWireSteps;
+
+    @FindBy(xpath = "//a[contains(@class,'button-exclusive btn btn-default')]")
+    private WebElement otherPaymentMethodsLink;
+
+    @FindBy(xpath = "//button[contains(.,'I confirm my order')]")
+    private WebElement iConfirmMyOrderBtn;
+
+    @FindBy(xpath = "//div[@class='box']")
+    private WebElement orderCompleteInformation;
+
 
     private void proceedToCheckOut() {
 
@@ -256,7 +279,7 @@ public class SummaryTabPage extends HomePage {
     public void verifyPaymentTab(Map<String, String> data) {
         verifyActiveTab(paymentTab);
         assertTrue(dressPaymentPic.isDisplayed(), "Dress pic is NOT displayed");
-        assertEquals(descriptionProductName.getText().trim(),data.get("Name").trim() , "Name of the product is NOT displayed");
+        assertEquals(descriptionProductName.getText().trim(), data.get("Name").trim(), "Name of the product is NOT displayed");
         String[] colorAndSize = sizeColor.getText().split(",");
         String[] uiColor = colorAndSize[0].split(":");
         String[] uiSize = colorAndSize[1].split(":");
@@ -267,27 +290,83 @@ public class SummaryTabPage extends HomePage {
         assertEquals(discount.getText().replaceAll("[-%]", "").trim(), data.get("Discount"), "Discount isn't correct");
         assertEquals(oldPrice.getText().replace("$", ""), data.get("PriceBeforeDiscount"), "Price before discount isn't correct");
         assertEquals(quantityPaymentTab.getText().trim(), data.get("Quantity").trim(), "Quantity on payment tab is not matching");
-        assertEquals(total.getText().trim().replace("$", ""), data.get("TotalCostBeforeShip"), "Total cost before ship is not macthing" );
-        assertEquals(totalProductPriceBeforeShipping.getText().trim().replace("$", ""), data.get("TotalCostBeforeShip"), "Total products cost before ship is not macthing" );
-        assertEquals(totalShippingPrice.getText().trim().replace("$", ""), data.get("ShippingCost"), "Total shipping cost is not matching");
-        assertEquals(totalProductPriceAfterShipping.getText().trim().replace("$", ""), data.get("TotalCost"),"Total product price after shipping  is not matching");
+        assertEquals(total.getText().trim().replace("$", ""), data.get("TotalCostBeforeShip"), "Total cost before ship is not matching");
+        assertEquals(totalProductPriceBeforeShipping.getText().trim().replace("$", ""), data.get("TotalCostBeforeShip"), "Total products cost before ship is not matching");
+        assertEquals(totalShippingPrice.getText().trim().replace("$", "").substring(0, 3), data.get("ShippingCost"), "Total shipping cost is not matching");
+        assertEquals(totalProductPriceAfterShipping.getText().trim().replace("$", ""), data.get("TotalCost"), "Total product price after shipping  is not matching");
         assertTrue(payByBankWire.isEnabled(), "Pay by bank wire is not enabled");
         assertTrue(payByCheck.isEnabled(), "Pay by check is not enabled");
         payForProduct(data);
+        verifyOrderConfirmation(data);
+
     }
 
-    public void payForProduct(Map<String,String>data) {
+    public void payForProduct(Map<String, String> data) {
         if (data.get("PaymentMethod").equals("Wire")) {
             payByBankWire.click();
 
-            ////div[contains(@class,'cheque-box')]/p[not(self::p/span)]
+            //save the price inter span if needed
+//            WebElement amount = driver.findElement(By.id("amount"));
+//            String jsCode = "let p = document.evaluate(\"(//p[@class='cheque-indent']/following-sibling::p)[1]\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+//                    "let child = document.evaluate(\"//span[@id='amount']\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+//                    "p.removeChild(child);";
+//            String jsCode = "document.getElementById('amount').textContent = ''; ";
+//            ((JavascriptExecutor) driver).executeScript(jsCode);
+//
+//
+//            WebElement allDiv = driver.findElement(By.xpath("//div[contains(@class,'cheque-box')]"));
+//
+//            System.out.println(allDiv.getText());
 
 
-        }else if(data.get("PaymentMethod").equals("Check")){
+            assertEquals(paymentOptionsHeader.getText().trim().toLowerCase(), data.get("BankWireHeader"), "Payment header is not matching!");
+
+            String[] bankWireStepsArray = data.get("BankWireSteps").trim().split("\\+");
+
+            for (int i = 0; i < instructionBankWireSteps.size(); i++) {
+                assertEquals(instructionBankWireSteps.get(i).getText().trim(), bankWireStepsArray[i], "Steps is not matching");
+            }
+            assertTrue(otherPaymentMethodsLink.isEnabled(), "Other payment methods button is not enabled!");
+            assertTrue(iConfirmMyOrderBtn.isEnabled(), "I confirm my order button is not enabled!");
+            iConfirmMyOrderBtn.click();
+
+        } else if (data.get("PaymentMethod").equals("Check")) {
             payByCheck.click();
+            assertEquals(paymentOptionsHeader.getText().trim().toLowerCase(), data.get("CheckHeader"), "Payment header is not matching!");
+
+            String[] checkStepsArray = data.get("CheckSteps").trim().split("\\+");
+
+            for (int i = 0; i < instructionCheckSteps.size(); i++) {
+                assertEquals(instructionCheckSteps.get(i).getText().trim(), checkStepsArray[i], "Steps is not matching");
+            }
+            assertTrue(otherPaymentMethodsLink.isEnabled(), "Other payment methods button is not enabled!");
+            assertTrue(iConfirmMyOrderBtn.isEnabled(), "I confirm my order button is not enabled!");
+            iConfirmMyOrderBtn.click();
+
         }
+    }
+
+    public void verifyOrderConfirmation(Map<String, String> data) {
+
+
+        List<String> confirmationLines = orderCompleteInformation.getText().trim().lines().collect(Collectors.toList());
+        StringBuilder temp = new StringBuilder();
+        for (int i = 0; i < confirmationLines.get(6).length(); i++) {
+            if (Character.isUpperCase(confirmationLines.get(6).charAt(i))) {
+                temp.append(confirmationLines.get(6).charAt(i));
+            }
+        }
+        //Line is start with 'D'o not in this case just getting order reference substring.
+        String orderReference = temp.substring(1);
+        data.put("orderReference", orderReference);
+
+        String orderInfoTextUi = orderCompleteInformation.getText().trim();
+        //System.out.println(orderInfoTextUi);
+        orderInfoTextUi = orderInfoTextUi.replace(" " + orderReference, "");
+        assertEquals(orderInfoTextUi, data.get("OrderCompleteInfo"));
 
     }
+
 }
 
 
