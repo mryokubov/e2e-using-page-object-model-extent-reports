@@ -348,7 +348,6 @@ public class SummaryTabPage extends HomePage {
 
     public void verifyOrderConfirmation(Map<String, String> data) {
 
-
         List<String> confirmationLines = orderCompleteInformation.getText().trim().lines().collect(Collectors.toList());
         StringBuilder temp = new StringBuilder();
         for (int i = 0; i < confirmationLines.get(6).length(); i++) {
@@ -365,6 +364,10 @@ public class SummaryTabPage extends HomePage {
         orderInfoTextUi = orderInfoTextUi.replace(" " + orderReference, "");
         assertEquals(orderInfoTextUi, data.get("OrderCompleteInfo"));
 
+    }
+
+    private void goBackToOrders(){
+        //todo I must complete this
     }
 
 }
