@@ -1,15 +1,10 @@
 package com.academy.techcenture.ecommerce.pages;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import java.io.*;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -51,8 +46,8 @@ public class OrderHistoryPage extends HomePage{
     }
 
     private void verifyPdfInvoiceFile(Map<String,String> data) throws IOException {
-        String invoiceFileName = getRecentFileName(INVOICES_FOLDER);
-        String pdfContent = readPdfDocument(invoiceFileName);
+        String invoiceFileName = commonUtils.getRecentFileName(INVOICES_FOLDER);
+        String pdfContent = commonUtils.readPdfDocument(invoiceFileName);
 
         Assert.assertTrue(pdfContent.contains(data.get("orderReference")));
         Assert.assertTrue(pdfContent.contains(data.get("Name")));
@@ -60,36 +55,4 @@ public class OrderHistoryPage extends HomePage{
 
     }
 
-
-    private String getRecentFileName(String directoryPath) {
-
-        File file = new File(directoryPath);
-
-        String[] directories = file.list((current, name) -> new File(current, name).isDirectory());
-
-        Arrays.sort(directories, Collections.reverseOrder());
-
-        String latestFileName = directories[0];
-
-        File loc = new File(directoryPath + "/" + latestFileName) ;
-
-        File[] files = loc.listFiles();
-
-        String fileName = files[0].getAbsolutePath();
-
-        System.out.println(fileName);
-
-        return fileName;
-    }
-
-    public String readPdfDocument(String pdfFilePath) throws IOException {
-        String content  = "";
-        PDDocument document = PDDocument.load(new File(pdfFilePath));
-        if (!document.isEncrypted()) {
-            PDFTextStripper stripper = new PDFTextStripper();
-            content = stripper.getText(document);
-        }
-        document.close();
-        return content;
-    }
 }

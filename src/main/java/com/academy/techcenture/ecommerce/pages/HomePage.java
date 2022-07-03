@@ -1,5 +1,6 @@
 package com.academy.techcenture.ecommerce.pages;
 
+import com.academy.techcenture.ecommerce.utils.CommonUtils;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,10 +20,12 @@ public class HomePage {
 
     protected WebDriver driver;
     protected WebDriverWait wait;
+    protected CommonUtils commonUtils;
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        this.commonUtils = new CommonUtils();
         PageFactory.initElements(driver, this);
     }
 
@@ -79,7 +82,7 @@ public class HomePage {
 
         if (signOutLink.isDisplayed()){
             signOutLink.click();
-            System.out.println("Clicking sign out");
+            wait.until(ExpectedConditions.titleIs("Login - My Store"));
         }
     }
 
@@ -157,7 +160,6 @@ public class HomePage {
                     }
                     break;
                 case "T-SHIRTS":
-                    System.out.println("there is not sub menu");
                     break;
             }
 
