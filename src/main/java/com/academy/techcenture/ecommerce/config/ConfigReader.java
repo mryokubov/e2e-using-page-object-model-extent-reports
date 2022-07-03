@@ -16,7 +16,6 @@ public class ConfigReader {
     private ConfigReader(){}
 
     static {
-        System.out.println("static block says hi!!!!!!!!!");
         try {
             FileInputStream inputStream = new FileInputStream(CONFIG_FILE_PATH);
             properties = new Properties();
@@ -32,18 +31,8 @@ public class ConfigReader {
     }
 
     public static void setProperty(String key, String value) throws IOException {
-        properties.store(new FileOutputStream(CONFIG_FILE_PATH), null);
+     //   properties.store(new FileOutputStream(CONFIG_FILE_PATH), null);
         properties.setProperty(key, value);
     }
-
-    public static void main(String[] args) {
-        System.out.println(properties.getProperty("browser"));
-        System.out.println(properties.getProperty("URL"));
-        System.out.println(properties.getProperty("username"));
-        System.out.println(properties.getProperty("password"));
-        properties.setProperty("orderNumber","FKFL4543");
-        System.out.println(properties.getProperty("orderNumber"));
-    }
-
 
 }
