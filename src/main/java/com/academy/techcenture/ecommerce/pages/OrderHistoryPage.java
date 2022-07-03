@@ -1,12 +1,12 @@
 package com.academy.techcenture.ecommerce.pages;
 
-import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,17 +44,19 @@ public class OrderHistoryPage extends HomePage{
         WebElement pdfInvoiceLink = driver.findElement(By.xpath(invoicePdfLink));
 
         pdfInvoiceLink.click();
+
         Thread.sleep(4000);
 
-        verifyPdfInvoiceFile();
-
+        verifyPdfInvoiceFile(data);
     }
 
-    private void verifyPdfInvoiceFile() throws IOException {
+    private void verifyPdfInvoiceFile(Map<String,String> data) throws IOException {
         String invoiceFileName = getRecentFileName(INVOICES_FOLDER);
         String pdfContent = readPdfDocument(invoiceFileName);
 
-        System.out.println(pdfContent);
+        Assert.assertTrue(pdfContent.contains(data.get("orderReference")));
+        Assert.assertTrue(pdfContent.contains(data.get("Name")));
+        Assert.assertTrue(pdfContent.contains(data.get("TotalCost")));
 
     }
 
@@ -90,6 +92,4 @@ public class OrderHistoryPage extends HomePage{
         document.close();
         return content;
     }
-
-
 }

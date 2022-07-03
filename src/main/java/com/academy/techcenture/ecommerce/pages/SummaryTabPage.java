@@ -1,19 +1,13 @@
 package com.academy.techcenture.ecommerce.pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
 import java.util.List;
 import java.util.Map;
-import java.util.Spliterator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import static org.testng.Assert.*;
 
 public class SummaryTabPage extends HomePage {
@@ -165,7 +159,7 @@ public class SummaryTabPage extends HomePage {
 
     }
 
-    public void shoppingCartSummary(Map<String, String> data) throws InterruptedException {
+    public void verifyShoppingCartSummary(Map<String, String> data) throws InterruptedException {
         verifyingProductSummaryTabs(data);
         proceedToCheckOut();
         verifyingAddressTab(data);
@@ -176,7 +170,7 @@ public class SummaryTabPage extends HomePage {
 
     }
 
-    public void verifyingProductSummaryTabs(Map<String, String> data) {
+    private void verifyingProductSummaryTabs(Map<String, String> data) {
         assertEquals(cartHeader.getText().trim().toUpperCase(), "SHOPPING-CART SUMMARY" + "\n" + "YOUR SHOPPING CART CONTAINS: " + data.get("Quantity") + " PRODUCTS", "Header is not correct");
         for (int i = 0; i < shoppingToDo.size(); i++) {
             assertEquals(shoppingToDo.get(i).getText().toLowerCase().substring(4), toDoOptions[i], toDoOptions[i] + "isnt match");
@@ -211,7 +205,7 @@ public class SummaryTabPage extends HomePage {
         assertTrue(checkOutBtn.isEnabled(), "Check Out Button isn't enabled");
     }
 
-    public void verifyingAddressTab(Map<String, String> data) {
+    private void verifyingAddressTab(Map<String, String> data) {
 
         verifyActiveTab(addressTab);
 
@@ -223,7 +217,7 @@ public class SummaryTabPage extends HomePage {
         commentBox.sendKeys("There should be a random comment, but may be later");
     }
 
-    public void verifyShippingTab(Map<String, String> data) throws InterruptedException {
+    private void verifyShippingTab(Map<String, String> data) throws InterruptedException {
 
         verifyActiveTab(shippingTab);
 
@@ -256,7 +250,6 @@ public class SummaryTabPage extends HomePage {
 
     }
 
-
     private void switchToFrame(WebElement frame) {
         driver.switchTo().frame(frame);
     }
@@ -267,7 +260,6 @@ public class SummaryTabPage extends HomePage {
         } else {
             driver.switchTo().frame(index);
         }
-
     }
 
     private void verifyActiveTab(WebElement tab) {
@@ -277,7 +269,7 @@ public class SummaryTabPage extends HomePage {
         assertEquals(hexcolor, "#ffffff", "Tab button is selected");
     }
 
-    public void verifyPaymentTab(Map<String, String> data) {
+    private void verifyPaymentTab(Map<String, String> data) {
         verifyActiveTab(paymentTab);
         assertTrue(dressPaymentPic.isDisplayed(), "Dress pic is NOT displayed");
         assertEquals(descriptionProductName.getText().trim(), data.get("Name").trim(), "Name of the product is NOT displayed");

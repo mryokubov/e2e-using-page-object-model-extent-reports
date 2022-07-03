@@ -1,7 +1,6 @@
 package com.academy.techcenture.ecommerce.utils;
 
 import com.github.javafaker.Faker;
-
 import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Random;
@@ -38,7 +37,6 @@ public class CommonUtils {
         String saltStr = salt.toString();
         return saltStr;
     }
-
 
     public String randomCompanyName(){
         return faker.company().name();
@@ -90,12 +88,8 @@ public class CommonUtils {
         return password;
     }
 
-
     public String randomApartment( ){
-
         return String.format(("%04d"), (int) Math.floor(9999*Math.random()));
-
-
     }
     public static int randomStar(){
         return (int)(Math.random() * (5 - 1  + 1 ) + 1);

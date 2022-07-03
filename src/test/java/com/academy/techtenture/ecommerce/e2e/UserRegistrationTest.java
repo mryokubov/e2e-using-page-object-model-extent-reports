@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class UserRegistrationTest extends BaseTest {
 
-
     @Test(priority = 0, dataProvider = "newUsersData")
     public void userRegistrationPositiveTest( Map<String,String> users ) throws IOException, InterruptedException {
 
@@ -66,7 +65,6 @@ public class UserRegistrationTest extends BaseTest {
         extentTest.log(LogStatus.INFO, "verified all errors on registration page when clicked on register button");
 
     }
-
 
     @DataProvider(name = "newUsersData")
     public Object[][] getNewUsersData(){

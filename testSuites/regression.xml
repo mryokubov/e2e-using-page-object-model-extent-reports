@@ -9,6 +9,7 @@
             <class name="com.academy.techtenture.ecommerce.e2e.UserRegistrationTest"></class>
             <class name="com.academy.techtenture.ecommerce.e2e.SocialNetworksTest"></class>
             <class name="com.academy.techtenture.ecommerce.e2e.ProductVerificationTest"></class>
+            <class name="com.academy.techtenture.ecommerce.e2e.PlaceOrderTest"></class>
         </classes>
     </test>
 </suite>

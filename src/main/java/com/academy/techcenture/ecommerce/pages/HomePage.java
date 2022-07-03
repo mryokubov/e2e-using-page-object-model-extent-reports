@@ -12,8 +12,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -62,9 +60,6 @@ public class HomePage {
     @FindBy(xpath = "//div[@class='ac_results']//li[1]")
     protected WebElement dropdownFirstItem;
 
-
-
-    //user actions with assertions and validations
     public void clickSingInLink() throws InterruptedException {
         assertTrue(signInLink.isEnabled(), "Sign in link was not displayed");
         Thread.sleep(3000);
@@ -88,7 +83,6 @@ public class HomePage {
         }
     }
 
-
     public void verifySocialNetworks() throws InterruptedException {
 
         //1. we can scroll down to Follow us web elment
@@ -100,7 +94,6 @@ public class HomePage {
 
         //scrolls to bottom of page
   //      js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-
 
         String mainWindow = driver.getWindowHandle(); //this contains the id of the main page
 
@@ -137,11 +130,9 @@ public class HomePage {
             driver.switchTo().window(mainWindow); //switch the focus back to home page (automationpractice.com)
 
         }
-
     }
 
     public void verifyProductTabs(Map<String,String> data) throws InterruptedException {
-
 
         for (int i = 0; i < topMenuTabs.size(); i++) {
 
@@ -171,9 +162,8 @@ public class HomePage {
             }
 
         }
-
-
     }
+
     public void searchProduct(Map<String,String> data) {
         searchInputBox.sendKeys(data.get("Name"));
         wait.until(ExpectedConditions.visibilityOf(dropdownFirstItem));

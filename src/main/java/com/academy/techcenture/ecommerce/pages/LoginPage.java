@@ -96,7 +96,6 @@ public class LoginPage {
         System.out.println("Clicking login btn");
     }
 
-
     /**
      * This method reads user credentials from excel sheet
      * @param users

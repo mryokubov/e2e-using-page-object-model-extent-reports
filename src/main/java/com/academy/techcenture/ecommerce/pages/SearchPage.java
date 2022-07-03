@@ -39,8 +39,6 @@ public class SearchPage extends HomePage{
             assertTrue( noResultAlertDiv.isDisplayed(), "");
             assertEquals( noResultAlertDiv.getText().trim(), data.get("expectedMessage") + " \""+ data.get("searchKeyword") + "\"" , "Mismatch between search keywords");
         }
-
-
     }
 
 }

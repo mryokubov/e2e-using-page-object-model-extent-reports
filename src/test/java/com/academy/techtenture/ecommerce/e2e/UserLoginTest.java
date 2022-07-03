@@ -7,11 +7,9 @@ import com.academy.techtenture.ecommerce.base.BaseTest;
 import com.relevantcodes.extentreports.LogStatus;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import java.util.Map;
 
 public class UserLoginTest extends BaseTest {
-
 
     @Test(priority = 0, dataProvider = "userLoginData")
     public void userLoginPositive(Map<String,String> users) throws InterruptedException {
@@ -41,7 +39,6 @@ public class UserLoginTest extends BaseTest {
         loginPage.verifyLoginErrors(users);
         extentTest.log(LogStatus.PASS, "verified login errors successfully");
     }
-
 
     @DataProvider(name = "userLoginData")
     public Object[][] getNewUsersData(){

@@ -4,9 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-
 import java.util.List;
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -19,7 +17,6 @@ public class UserAccountPage {
         PageFactory.initElements(driver, this);
     }
 
-    //web elements
     @FindBy(className = "logout")
     private WebElement signOutLink;
 
@@ -42,7 +39,7 @@ public class UserAccountPage {
     private String[] accountOptionsExpected = {"order history and details",
     "my credit slips", "my addresses","my personal information","my wishlists"};
 
-    //actions
+
     public void signOut(){
         assertTrue(signOutLink.isDisplayed(), "Sign out is not displayed");
         signOutLink.click();

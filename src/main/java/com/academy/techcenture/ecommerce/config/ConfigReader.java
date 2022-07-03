@@ -9,10 +9,8 @@ import java.util.Properties;
 public class ConfigReader {
 
     private static Properties properties;
-    //constant - final and static
     private static final String CONFIG_FILE_PATH = "src/main/resources/config.properties";
 
-    //hiding the constructor so this class cannot be instantiated
     private ConfigReader(){}
 
     static {
@@ -34,5 +32,4 @@ public class ConfigReader {
      //   properties.store(new FileOutputStream(CONFIG_FILE_PATH), null);
         properties.setProperty(key, value);
     }
-
 }

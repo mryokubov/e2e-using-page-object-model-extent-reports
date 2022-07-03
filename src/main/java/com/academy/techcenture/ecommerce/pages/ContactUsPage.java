@@ -7,7 +7,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.io.File;
 import java.time.Duration;
 import java.util.List;
@@ -75,7 +74,6 @@ public class ContactUsPage {
             orderRefInput.sendKeys(data.get("orderReference"));
             emailInput.sendKeys(data.get("emailAddress"));
         }
-
 
         File f = new File("src/main/resources/pics/e2e-using-page-object-model_userLoginPositive.jpg");
         String absolute = f.getAbsolutePath();

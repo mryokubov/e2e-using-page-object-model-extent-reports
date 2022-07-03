@@ -6,11 +6,10 @@ import com.academy.techtenture.ecommerce.base.BaseTest;
 import com.relevantcodes.extentreports.LogStatus;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import java.io.IOException;
 import java.util.Map;
-public class PlaceOrderTest extends BaseTest {
 
+public class PlaceOrderTest extends BaseTest {
 
     @Test(priority = 0,  dataProvider = "ProductPage")
     public void placeOrderRegisteredUserTest( Map<String,String> data ) throws IOException, InterruptedException {
@@ -29,18 +28,18 @@ public class PlaceOrderTest extends BaseTest {
         extentTest.log(LogStatus.INFO, "Search product successfully");
         productPage.verifyingTheProductPage(data);
         extentTest.log(LogStatus.INFO, "Product was successfully added");
-        summaryTabPage.shoppingCartSummary(data);
+
+        summaryTabPage.verifyShoppingCartSummary(data);
+
         extentTest.log(LogStatus.INFO, "Navigated to order history page");
         orderHistoryPage.verifyOrderHistory(data);
-
-
- //       extentTest.log(LogStatus.INFO, "Place order finished successfully");
+        homePage.signOut();
+        extentTest.log(LogStatus.INFO, "Place order finished successfully");
     }
 
 
     @DataProvider(name = "ProductPage")
     public Object[][] getNewUsersData(){
-        //todo use the proper sheetname
         ExcelReader excelReader = new ExcelReader("src/main/resources/testData/ecommerce.xlsx", "ProductPage");
         return excelReader.getData();
     }
