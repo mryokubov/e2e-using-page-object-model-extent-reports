@@ -7,6 +7,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import static org.testng.Assert.*;
 
@@ -339,26 +341,41 @@ public class SummaryTabPage extends HomePage {
         }
     }
 
+//    public void verifyOrderConfirmation(Map<String, String> data) {
+//
+//        List<String> confirmationLines = orderCompleteInformation.getText().trim().lines().collect(Collectors.toList());
+//        StringBuilder temp = new StringBuilder();
+//        for (int i = 0; i < confirmationLines.get(6).length(); i++) {
+//            if (Character.isUpperCase(confirmationLines.get(6).charAt(i))) {
+//                temp.append(confirmationLines.get(6).charAt(i));
+//            }
+//        }
+//        //Line is start with 'D'o not in this case just getting order reference substring.
+//        String orderReference = temp.substring(1);
+//        data.put("orderReference", orderReference);
+//
+//        String orderInfoTextUi = orderCompleteInformation.getText().trim();
+//        //System.out.println(orderInfoTextUi);
+//        orderInfoTextUi = orderInfoTextUi.replace(" " + orderReference, "");
+//        assertEquals(orderInfoTextUi, data.get("OrderCompleteInfo"));
+//
+//        //goes back to orders page
+//        goBackToOrders();
+//    }
+
     public void verifyOrderConfirmation(Map<String, String> data) {
+        String orderConfirmationTxt = orderCompleteInformation.getText();
 
-        List<String> confirmationLines = orderCompleteInformation.getText().trim().lines().collect(Collectors.toList());
-        StringBuilder temp = new StringBuilder();
-        for (int i = 0; i < confirmationLines.get(6).length(); i++) {
-            if (Character.isUpperCase(confirmationLines.get(6).charAt(i))) {
-                temp.append(confirmationLines.get(6).charAt(i));
-            }
+        Pattern pattern = Pattern.compile("([A-Z]){9}");
+        Matcher matcher = pattern.matcher(orderConfirmationTxt);
+        String orderReference = "";
+        while (matcher.find()) {
+            orderReference = matcher.group();
         }
-        //Line is start with 'D'o not in this case just getting order reference substring.
-        String orderReference = temp.substring(1);
         data.put("orderReference", orderReference);
-
         String orderInfoTextUi = orderCompleteInformation.getText().trim();
-        //System.out.println(orderInfoTextUi);
         orderInfoTextUi = orderInfoTextUi.replace(" " + orderReference, "");
         assertEquals(orderInfoTextUi, data.get("OrderCompleteInfo"));
-
-        //goes back to orders page
-        goBackToOrders();
     }
 
     @FindBy(linkText = "Back to orders")
