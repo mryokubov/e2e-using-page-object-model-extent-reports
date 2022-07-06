@@ -22,7 +22,6 @@ public class SearchFunctionalityTest extends BaseTest {
     @DataProvider(name = "searchKeyword")
     public Object[][] getSearchKeyword(){
         return new ExcelReader("src/main/resources/testData/ecommerce.xlsx","searchKeywords").getData();
-
     }
 
 }

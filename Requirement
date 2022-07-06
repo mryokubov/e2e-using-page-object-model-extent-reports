@@ -1,0 +1,36 @@
+1. To go homepage
+2. Login in to application (Kevin lee)
+3. Enter printed summer dress in search input
+4. Pick the first suggested option under search input box
+5. Verify the whole page of that product page.
+ Product info, social networks, data sheet, price, quantity, size, colors, add to cart button, Visa cards,
+6. Add a review and send the review and verify pop up message
+6. Send to a friend
+7. Increase quantity to 2
+8. Click on add to cart
+9. Verify the pop up with the information on it including price calculations
+10. Click on proceed to checkout
+11. Verify you are on summary tab and the whole page
+12. Click on proceed to checkout
+13.
+14. Verify address tab and the page and the check box and add random comment
+15.
+16. Click proceed to checkout
+17. Verify shipping tab and the information on the page, radio button
+18. Click on proceed to checkout
+19. It should give a pop up saying you must agree to terms, verify that pop up
+20. Click on read terms of service
+21. Verify 3 rules on the modal window and close it
+22. Check the box and proceed to checkout out
+23. Verify Payment tab and everything on the page including the prices
+24. Verify two payment methods
+25. Click on pay by bank wire
+26. Verify bank-wire payment bullet points
+27. Click on I confirm my order
+28. Verify order is confirmed talk points and save that reference number
+29. Click on back to orders
+30. Verify that order number is matching and is the first one on top
+31. Verify date, total price, payment , status, pdf, and details
+32. Click on PDF and download it (it should be downloaded to your downloads folder)
+34. Open that PDF file from your downloads folder and read the total price and compare it against the total price on the UI
+35. Sign out and close the browser

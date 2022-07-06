@@ -8,14 +8,13 @@ import com.academy.techcenture.ecommerce.pages.ContactUsPage;
 import com.relevantcodes.extentreports.LogStatus;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import java.io.IOException;
 import java.util.Map;
 
 public class ContactUsTest extends BaseTest {
 
 
     @Test(priority = 0,  dataProvider = "contactUs")
-    public void contactUsPositiveTest( Map<String,String> data ) throws IOException {
+    public void contactUsPositiveTest( Map<String,String> data ) throws InterruptedException {
 
         extentTest = extentReports.startTest("contact us functionality positive test");
         HomePage homePage = new HomePage(driver);
@@ -36,7 +35,6 @@ public class ContactUsTest extends BaseTest {
         extentTest.log(LogStatus.INFO, "Contact us finished successfully");
 
     }
-
 
     @DataProvider(name = "contactUs")
     public Object[][] getNewUsersData(){

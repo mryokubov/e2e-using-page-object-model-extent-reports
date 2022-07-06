@@ -6,12 +6,10 @@ import com.academy.techtenture.ecommerce.base.BaseTest;
 import com.relevantcodes.extentreports.LogStatus;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import java.util.Map;
 
-//high level name for the functionality that you are testing
-public class ProductVerificationTest extends BaseTest {
 
+public class ProductVerificationTest extends BaseTest {
 
     @Test(dataProvider = "dresses")
     public void verifyProductTabsTest(Map<String,String> data) throws InterruptedException {
@@ -20,7 +18,6 @@ public class ProductVerificationTest extends BaseTest {
         homePage.verifyProductTabs(data);
         extentTest.log(LogStatus.PASS, "verified all product tabs successfully");
     }
-
 
     @DataProvider (name = "dresses")
     public Object[][] getDresses(){

@@ -4,7 +4,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import java.util.Map;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -13,7 +12,6 @@ public class SearchPage extends HomePage{
 
     public SearchPage(WebDriver driver){
         super(driver);
-        PageFactory.initElements(driver, this);
     }
 
     @FindBy(xpath = "//span[@class='heading-counter']")
@@ -39,8 +37,6 @@ public class SearchPage extends HomePage{
             assertTrue( noResultAlertDiv.isDisplayed(), "");
             assertEquals( noResultAlertDiv.getText().trim(), data.get("expectedMessage") + " \""+ data.get("searchKeyword") + "\"" , "Mismatch between search keywords");
         }
-
-
     }
 
 }

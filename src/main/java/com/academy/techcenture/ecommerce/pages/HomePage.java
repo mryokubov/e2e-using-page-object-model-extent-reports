@@ -5,26 +5,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class HomePage {
-
-    protected WebDriver driver;
-    protected WebDriverWait wait;
+public class HomePage extends BasePage{
 
     public HomePage(WebDriver driver) {
-        this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        PageFactory.initElements(driver, this);
+       super(driver);
     }
 
     //web elements
@@ -58,10 +49,15 @@ public class HomePage {
     @FindBy(xpath = "(//ul[contains(@class,'submenu-container')])[2]/li/a")
     protected List<WebElement> typesOfDresses;
 
-    //user actions with assertions and validations
-    public void clickSingInLink(){
-        assertTrue(signInLink.isDisplayed(), "Sign in link was not displayed");
+    @FindBy(xpath = "//div[@class='ac_results']//li[1]")
+    protected WebElement dropdownFirstItem;
+
+    public void clickSingInLink() throws InterruptedException {
+        assertTrue(signInLink.isEnabled(), "Sign in link was not displayed");
+        Thread.sleep(3000);
+        wait.until(ExpectedConditions.elementToBeClickable(signInLink));
         signInLink.click();
+
         System.out.println("clicking sign in link");
     }
 
@@ -75,10 +71,9 @@ public class HomePage {
 
         if (signOutLink.isDisplayed()){
             signOutLink.click();
-            System.out.println("Clicking sign out");
+      //      wait.until(ExpectedConditions.titleIs("Login - My Store"));
         }
     }
-
 
     public void verifySocialNetworks() throws InterruptedException {
 
@@ -91,7 +86,6 @@ public class HomePage {
 
         //scrolls to bottom of page
   //      js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-
 
         String mainWindow = driver.getWindowHandle(); //this contains the id of the main page
 
@@ -128,11 +122,9 @@ public class HomePage {
             driver.switchTo().window(mainWindow); //switch the focus back to home page (automationpractice.com)
 
         }
-
     }
 
     public void verifyProductTabs(Map<String,String> data) throws InterruptedException {
-
 
         for (int i = 0; i < topMenuTabs.size(); i++) {
 
@@ -157,12 +149,16 @@ public class HomePage {
                     }
                     break;
                 case "T-SHIRTS":
-                    System.out.println("there is not sub menu");
                     break;
             }
 
         }
+    }
 
+    public void searchProduct(Map<String,String> data) {
+        searchInputBox.sendKeys(data.get("Name"));
+        wait.until(ExpectedConditions.visibilityOf(dropdownFirstItem));
+        dropdownFirstItem.click();
     }
 }
 

@@ -14,9 +14,8 @@ import java.util.Map;
 
 public class UserRegistrationTest extends BaseTest {
 
-
     @Test(priority = 0, dataProvider = "newUsersData")
-    public void userRegistrationPositiveTest( Map<String,String> users ) throws IOException {
+    public void userRegistrationPositiveTest( Map<String,String> users ) throws IOException, InterruptedException {
 
         extentTest = extentReports.startTest("user registration positive test");
         HomePage homePage = new HomePage(driver);
@@ -52,7 +51,7 @@ public class UserRegistrationTest extends BaseTest {
     }
 
     @Test(dataProvider = "registerErrorMessages")
-    public void verifyErrorsOnRegisterPage(Map<String,String> users) throws IOException {
+    public void verifyErrorsOnRegisterPage(Map<String,String> users) throws  InterruptedException {
         extentTest = extentReports.startTest("user registration negative test on registration page");
         HomePage homePage = new HomePage(driver);
         LoginPage loginPage = new LoginPage(driver);
@@ -66,7 +65,6 @@ public class UserRegistrationTest extends BaseTest {
         extentTest.log(LogStatus.INFO, "verified all errors on registration page when clicked on register button");
 
     }
-
 
     @DataProvider(name = "newUsersData")
     public Object[][] getNewUsersData(){

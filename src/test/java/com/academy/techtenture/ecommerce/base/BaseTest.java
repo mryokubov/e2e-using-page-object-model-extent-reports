@@ -16,7 +16,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -29,7 +28,6 @@ public abstract class BaseTest {
     protected ExtentTest extentTest;
     protected String browserName;
     protected String browserVersion;
-
 
     @BeforeTest
     public void beforeTest(){
@@ -83,7 +81,6 @@ public abstract class BaseTest {
             driver.quit();
         }
     }
-
 
     public static String getScreenshot(WebDriver driver, String screenshotName) throws IOException {
         String dateName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());

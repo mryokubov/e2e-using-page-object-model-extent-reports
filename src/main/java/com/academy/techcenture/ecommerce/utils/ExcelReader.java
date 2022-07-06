@@ -1,9 +1,10 @@
 package com.academy.techcenture.ecommerce.utils;
 
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
@@ -27,10 +28,10 @@ public class ExcelReader {
         }
     }
 
-
     public Object[][] getData(){
+        FormulaEvaluator evaluator = workBook.getCreationHelper().createFormulaEvaluator();
 
-        int rows = workSheet.getLastRowNum(); // returns number of rows
+         int rows = workSheet.getLastRowNum(); // returns number of rows
         int cols = workSheet.getRow(0).getLastCellNum(); //returns number of cols
 
         Object[][] data = new Object[rows][1];
@@ -41,14 +42,17 @@ public class ExcelReader {
             for (int j = 0; j < cols; j++) {
                 //each column name is a key
                 XSSFCell cell = workSheet.getRow(i + 1).getCell(j);// might be null sometimes if the cell is empty
-
                 if (cell == null){
                     System.out.println();
                 }
 
-                map.put(workSheet.getRow(0).getCell(j).toString(),
-                        // each cell under column name will be value
-                        cell == null  ? "" : cell.toString() );
+                if (cell.getCellType() == CellType.FORMULA) {
+                    map.put(workSheet.getRow(0).getCell(j).toString(), cell == null  ? "" : String.valueOf(cell.getNumericCellValue()) );
+                }else{
+                    map.put(workSheet.getRow(0).getCell(j).toString(),
+                            // each cell under column name will be value
+                            cell == null  ? "" : cell.toString() );
+                }
             }
             data[i][0] = map;
         }
