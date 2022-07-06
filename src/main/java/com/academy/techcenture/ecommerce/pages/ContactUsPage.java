@@ -3,27 +3,20 @@ package com.academy.techcenture.ecommerce.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.File;
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class ContactUsPage {
+public class ContactUsPage extends HomePage {
 
-    private WebDriver driver;
-    private WebDriverWait wait;
 
     public ContactUsPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait= new WebDriverWait(driver, Duration.ofSeconds(20));
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
 
@@ -88,6 +81,7 @@ public class ContactUsPage {
         assertEquals(successAlertMessage.getText().trim(), data.get("successAlertMessage"), "Success alert message was not correct");
 
         goHome();
+
     }
 
     private void goHome(){

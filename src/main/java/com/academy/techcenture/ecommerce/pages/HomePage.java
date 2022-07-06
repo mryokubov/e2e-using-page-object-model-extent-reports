@@ -1,32 +1,21 @@
 package com.academy.techcenture.ecommerce.pages;
 
-import com.academy.techcenture.ecommerce.utils.CommonUtils;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class HomePage {
-
-    protected WebDriver driver;
-    protected WebDriverWait wait;
-    protected CommonUtils commonUtils;
+public class HomePage extends BasePage{
 
     public HomePage(WebDriver driver) {
-        this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        this.commonUtils = new CommonUtils();
-        PageFactory.initElements(driver, this);
+       super(driver);
     }
 
     //web elements
@@ -82,7 +71,7 @@ public class HomePage {
 
         if (signOutLink.isDisplayed()){
             signOutLink.click();
-            wait.until(ExpectedConditions.titleIs("Login - My Store"));
+      //      wait.until(ExpectedConditions.titleIs("Login - My Store"));
         }
     }
 

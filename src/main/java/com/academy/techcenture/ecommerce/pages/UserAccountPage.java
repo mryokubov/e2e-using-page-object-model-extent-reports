@@ -3,18 +3,14 @@ package com.academy.techcenture.ecommerce.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import java.util.List;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class UserAccountPage {
-
-    private WebDriver driver;
+public class UserAccountPage extends HomePage{
 
     public UserAccountPage(WebDriver driver)  {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     @FindBy(className = "logout")
